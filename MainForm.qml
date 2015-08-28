@@ -1,7 +1,15 @@
-import QtQuick 2.0
+import QtQuick 2.4
+import com.ics.demo 1.0
 
-Rectangle {
-    width: 100
-    height: 62
+Image {
+    id: backgroundGame
+    source: "qrc:/images/bg.jpg"
+    width: window.width
+    height: window.height
+    property alias font: game.font
+
+    Game {
+        id: game
+    }
 }
 

@@ -1,6 +1,16 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>MainForm.ui.qml</file>
+        <file>Field.qml</file>
+        <file>images/ORed1.png</file>
+        <file>images/XRed1.png</file>
+        <file>images/bg.jpg</file>
+        <file>ClickableImage.qml</file>
+        <file>images/eraser.png</file>
+        <file>MainForm.qml</file>
+        <file>ClickableText.qml</file>
+        <file>Menu.qml</file>
+        <file>Game.qml</file>
+        <file>fonts/Schoolbell.ttf</file>
     </qresource>
 </RCC>
