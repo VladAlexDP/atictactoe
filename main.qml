@@ -6,12 +6,15 @@ import com.ics.demo 1.0
 
 ApplicationWindow {
     id: window
+
+    property real scale: width / 800
+
     title: qsTr("ATicTacToe")
-    width: 540
-    height: 840
+    width: Screen.width
+    height: Screen.height
     visible: true
 
-    FontLoader { id: sfont; source: "qrc:/fonts/Schoolbell.ttf" }
+    FontLoader { id: sfont; source: "qrc:/sources/fonts/Schoolbell.ttf" }
 
     Flipable {
         id: flipable
@@ -31,7 +34,7 @@ ApplicationWindow {
         }
         front: Image {
             id: menuForm
-            source: "qrc:/images/bg.jpg"
+            source: "qrc:/sources/images/bg.jpg"
             width: window.width
             height: window.height
             mirror: true
@@ -40,11 +43,19 @@ ApplicationWindow {
                 anchors.centerIn: parent
                 ClickableText {
                     text: "Play"
-                    textSize: 50
+                    textSize: 120 * scale
                     fontFamily: sfont.name
                     onClicked: {
                         flipable.state =  "play"
                         console.log("Stage changed to " + flipable.state)
+                    }
+                }
+                ClickableText {
+                    text: "Exit"
+                    textSize: 120 * scale //
+                    fontFamily: sfont.name
+                    onClicked: {
+                        close()
                     }
                 }
             }
@@ -112,8 +123,7 @@ ApplicationWindow {
                     ParallelAnimation {
                         NumberAnimation { target: flipable; property: "x"; duration: 500 }
                         NumberAnimation { target: bg; property: "x"; duration: 500 }
-                    }
-                    PropertyAnimation { target: gameForm.gameField; property: "visible"; }
+                    }                    
                 }
             },
             Transition {
@@ -125,7 +135,7 @@ ApplicationWindow {
     Image {
         id: bg
 
-        source: "qrc:/images/bg.jpg"
+        source: "qrc:/sources/images/bg.jpg"
         width: window.width
         height: window.height
         mirror: true

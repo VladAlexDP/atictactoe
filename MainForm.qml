@@ -3,7 +3,7 @@ import com.ics.demo 1.0
 
 Image {
     id: backgroundGame
-    source: "qrc:/images/bg.jpg"
+    source: "qrc:/sources/images/bg.jpg"
     width: window.width
     height: window.height
     property alias font: game.font

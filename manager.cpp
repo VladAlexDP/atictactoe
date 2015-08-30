@@ -6,7 +6,7 @@ Manager::Manager(unsigned squares_num, QObject *parent)
 
 }
 
-void Manager::registTurn(int cIndex, int sIndex)
+void Manager::registTurn(int sIndex, int cIndex)
 {
     Square& sq = _field[sIndex];
     if (sq.completed || sq[cIndex] != EmptyCell)
@@ -19,8 +19,8 @@ void Manager::registTurn(int cIndex, int sIndex)
     Manager::Result_t r = check(sq, cIndex, _crosses_turn ? Cross : Nought);
     if(std::get<0>(r)) {
         _crosses_turn ? _crosses_score++ : _noughts_score++;
-        Manager::LineCoordinates_t lineCoordinates = calculate_coordinates(sIndex, std::get<1>(r), std::get<2>(r));
-        emit scoreChanged(lineCoordinates.first.first, lineCoordinates.first.second,
+        Manager::LineCoordinates_t lineCoordinates = calculate_coordinates(std::get<1>(r), std::get<2>(r));
+        emit scoreChanged(sIndex, lineCoordinates.first.first, lineCoordinates.first.second,
                           lineCoordinates.second.first, lineCoordinates.second.second);
         emit squareCompleted(sIndex);
         sq.completed = true;
@@ -91,14 +91,10 @@ Manager::Result_t Manager::check(Square board, unsigned cIndex, CellState state)
     return std::tuple<bool, short, short>(false, 0, 0);
 }
 
-Manager::LineCoordinates_t Manager::calculate_coordinates(short sIndex, short bIndex, short eIndex)
+Manager::LineCoordinates_t Manager::calculate_coordinates(short bIndex, short eIndex)
 {
     int n = sqrt(CELLS_NUM);
-    int cell_size_px = SQUARE_SIZE_PX / n;
-
-    //absolute coords
-    int sHCoords = sIndex%2 * (SQUARE_SIZE_PX + SQUARE_MARGIN_PX);
-    int sVCoords = floor(sIndex/2) * (SQUARE_SIZE_PX + SQUARE_MARGIN_PX);
+    int cell_size_px = _square_size_px / n;
 
     //relative coords
     int bHCoords = bIndex%n        * cell_size_px;
@@ -106,7 +102,7 @@ Manager::LineCoordinates_t Manager::calculate_coordinates(short sIndex, short bI
     int eHCoords = eIndex%n        * cell_size_px;
     int eVCoords = floor(eIndex/n) * cell_size_px;
 
-    //correction of line to look more realistic
+    //correction of line
     if(bHCoords == eHCoords) {
         bHCoords += cell_size_px/2;
         eHCoords += cell_size_px/2;
@@ -123,14 +119,14 @@ Manager::LineCoordinates_t Manager::calculate_coordinates(short sIndex, short bI
         eVCoords += cell_size_px;
     }
 
-    //adding some rand values to looks natural
+    //adding some rand values to look natural
     bHCoords += qrand() % RAND_FACTOR;
     bVCoords += qrand() % RAND_FACTOR;
     eHCoords += qrand() % RAND_FACTOR;
     eVCoords += qrand() % RAND_FACTOR;
 
-    return Manager::LineCoordinates_t(Manager::Coordinates_t(sHCoords+bHCoords, sVCoords+bVCoords),
-                                      Manager::Coordinates_t(sHCoords+eHCoords, sVCoords+eVCoords));
+    return Manager::LineCoordinates_t(Manager::Coordinates_t(bHCoords, bVCoords),
+                                      Manager::Coordinates_t(eHCoords, eVCoords));
 }
 
 

@@ -1,79 +1,47 @@
 import QtQuick 2.4
 
-Item {
+Grid {
     id: root
 
-    property alias squareR: squareR
-    property alias canvas: canvas
+    rows: 3; columns: 2
 
-    width: 600
-    height: 600
+    property int canvasMargin: 10
+    property int fontSize: 100
+    property int borderWidth: 3
+    property int squareSize: 200
+    property int lineWidth: 10
+    property string fontFamily: "Arial"
+    property alias model: squareR.model
+    property alias squareRepeater: squareR
 
-    Canvas {
-        id: canvas        
+    signal clicked(var sIndex, var cIndex);
 
-        function drawLine(bHCoords, bVCoords, eHCoords, eVCoords) {
-            var context = getContext("2d");
-            context.strokeStyle = "black";
-            context.beginPath();
-            context.lineWidth = 5;
-            context.moveTo(bHCoords, bVCoords);
-            context.lineTo(eHCoords, eVCoords);
-            context.stroke();
-            requestPaint();
-        }
-        function clear() {
-            var context = getContext("2d");
-            context.clearRect(0, 0, width, height);
-            requestPaint();
-            manager.clearField();
-        }
-
-        anchors.fill: parent
-        x: 0; y: 0; z: 5
-        width: root.width
-        height: root.height
+    function clear() {
+        for(var i=0; i < squareR.count; ++i) {
+            squareR.itemAt(i).clear();
+            for(var j=0; j < squareR.itemAt(i).cellRepeater.count; ++j) {
+                squareR.itemAt(i).cellRepeater.itemAt(j).text = "";
+            }
+            squareR.itemAt(i).requestPaint();
+        }        
+    }
+    function drawLine(sIndex, bHCoords, bVCoords, eHCoords, eVCoords) {
+        squareR.itemAt(sIndex).drawLine(bHCoords, bVCoords, eHCoords, eVCoords);
+        squareR.itemAt(sIndex).requestPaint();
     }
 
-    Grid {
-        columns: 2
-        rows: 3
-        spacing: manager.square_margin / 10 - 1
-        //x: 0; y: 0
+    Repeater {
+        id: squareR
+        Square {
+            cMargin: root.canvasMargin
+            fSize: root.fontSize
+            fFamily: fontFamily
+            bWidth: root.borderWidth
+            lWidth: lineWidth
+            width: root.squareSize; height: root.squareSize
 
-        Repeater {
-            id: squareR
-            model: 6
-            Grid {
-                property int sqIndex: index
-                property alias cellR: cellR
-
-                columns:3
-                rows: 3
-                spacing: -3
-
-                Repeater {
-                    model: 9
-                    id: cellR
-                    Rectangle {
-                        property alias isource: image.source
-
-                        width: root.width/9
-                        height: width
-                        border.width: 3
-                        border.color: "black"
-                        color: "transparent"
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: manager.registTurn(index, sqIndex)
-                        }
-                        Image {
-                            id: image
-                            anchors.fill: parent
-                        }
-                    }
-                }
+            onClicked: {
+                root.clicked(index, cIndex);
             }
         }
     }

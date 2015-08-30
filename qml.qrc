@@ -2,15 +2,16 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>Field.qml</file>
-        <file>images/ORed1.png</file>
-        <file>images/XRed1.png</file>
-        <file>images/bg.jpg</file>
         <file>ClickableImage.qml</file>
-        <file>images/eraser.png</file>
         <file>MainForm.qml</file>
         <file>ClickableText.qml</file>
         <file>Menu.qml</file>
         <file>Game.qml</file>
+        <file>Square.qml</file>
+    </qresource>
+    <qresource prefix="/sources">
+        <file>images/bg.jpg</file>
         <file>fonts/Schoolbell.ttf</file>
+        <file>images/eraser.png</file>
     </qresource>
 </RCC>

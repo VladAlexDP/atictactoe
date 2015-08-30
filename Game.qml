@@ -5,35 +5,22 @@ Item {
     id: root
     anchors.fill: parent
 
-    /*property alias turn: turn
-    property alias oscore: oscore
-    property alias xscore: xscore
-    property alias field: field
-    property alias erase: erase
-    property alias manager: manager*/
     property alias gameField: gameField
     property alias font: turn.font.family
 
     Item {
-    //Row {
-        //x: -110
         id: gameField
+        anchors.fill: parent
 
         ClickableImage {
             id: erase
-            width: 200
-            height: 500
-            x: -110
-            y: 310
-            scale: 0.4
-            rotation: 90
-            source: "qrc:///images/eraser.png"
+            x: - 104 *  (1 - window.scale)
+            y: window.height/2 - erase.height * (1- window.scale) / 2
+            scale: window.scale * 0.6
+            source: "qrc:/sources/images/eraser.png"
             onClicked: {
-                for(var i=0; i < field.squareR.count; ++i) {
-                    for(var j=0; j < field.squareR.itemAt(i).cellR.count; ++j)
-                        field.squareR.itemAt(i).cellR.itemAt(j).isource = "";
-                }
-                field.canvas.clear();
+                field.clear();
+                manager.clearField();
             }
             Behavior on visible {
                 PropertyAnimation { duration: 4000 }
@@ -41,46 +28,56 @@ Item {
         }
 
         Item {
-            x: 100
-            y: 15
-            Column {
-                spacing: 19
-                Text {
-                    id: turn
-                    text: "X's turn"
-                    font.pixelSize: 50
-                    Behavior on visible {
-                        PropertyAnimation { duration: 1000 }
-                    }
-                }
-                Row {
-                    id: score
-                    spacing: 250 - oscore.width
-                    Text {
-                        id: oscore
-                        text: "O: "
-                        font.pixelSize: 50
-                        font.family: turn.font.family
-                    }
-                    Text {
-                        id: xscore
-                        text: "X: "
-                        font.pixelSize: 50
-                        font.family: turn.font.family
-                    }
-                    Behavior on visible {
-                        PropertyAnimation { duration: 2000 }
-                    }
-                }
-                Field {
-                    id: field
-                    Behavior on visible {
-                        PropertyAnimation { duration: 3000 }
-                    }
+            x: erase.width * erase.scale + window.width * 0.05
+            Text {
+                id: turn
+                text: "Turn: X"
+                font.pixelSize: 85 * window.scale //
+                y: window.height * 0.1 /2
+                Behavior on visible {
+                    PropertyAnimation { duration: 1000 }
                 }
             }
-
+            Row {
+                id: score
+                y: window.height * 0.12
+                spacing: 325 * window.scale - oscore.width //
+                Text {
+                    id: oscore
+                    text: "O: "
+                    font.pixelSize: 85 * window.scale //
+                    font.family: turn.font.family
+                }
+                Text {
+                    id: xscore
+                    text: "X: "
+                    font.pixelSize: 85 * window.scale //
+                    font.family: turn.font.family
+                }
+                Behavior on visible {
+                    PropertyAnimation { duration: 2000 }
+                }
+            }
+            Field {
+                id: field
+                y: score.height + score.y
+                height: window.height - y/2
+                model: 6
+                fontFamily: turn.font.family
+                fontSize: 120 * window.scale
+                lineWidth: 10 * window.scale
+                borderWidth: 3 * window.scale
+                squareSize: 300 * window.scale
+                canvasMargin: 20
+                onClicked: {
+                    manager.registTurn(sIndex, cIndex)
+                }
+                Behavior on visible {
+                    PropertyAnimation { duration: 3000 }
+                }
+            }
         }
+
         onVisibleChanged:  {
             field.visible = visible;
             score.visible = visible;
@@ -90,13 +87,16 @@ Item {
     }
     Manager {
         id: manager
+
+        square_size_px: field.squareSize
+
         onCellFilled: {
             if (manager.crosses_turn) {
-                field.squareR.itemAt(sIndex).cellR.itemAt(cIndex).isource = "qrc:///images/XRed1.png";
-                turn.text = "O's turn";
+                field.squareRepeater.itemAt(sIndex).cellRepeater.itemAt(cIndex).text = "X";
+                turn.text = "Turn: O";
             } else {
-                field.squareR.itemAt(sIndex).cellR.itemAt(cIndex).isource = "qrc:///images/ORed1.png";
-                turn.text = "X's turn";
+                field.squareRepeater.itemAt(sIndex).cellRepeater.itemAt(cIndex).text = "O";
+                turn.text = "Turn: X";
             }
         }
         onScoreChanged: {
@@ -105,12 +105,12 @@ Item {
             else
                 oscore.text += "I"
 
-            field.canvas.drawLine(bHCoords, bVCoords, eHCoords, eVCoords)
+            field.drawLine(sIndex, bHCoords, bVCoords, eHCoords, eVCoords);
         }
         onErase: {
             xscore.text = "X: "
             oscore.text = "O: "
-            turn.text = "X's turn"
+            turn.text = "Turn: X"
         }
     }
 }
