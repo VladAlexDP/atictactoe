@@ -5,32 +5,22 @@ Item {
     id: root
     anchors.fill: parent
 
-    /*property alias turn: turn
-    property alias oscore: oscore
-    property alias xscore: xscore
-    property alias field: field
-    property alias erase: erase
-    property alias manager: manager*/
     property alias gameField: gameField
     property alias font: turn.font.family
 
     Item {
-    //Row {
         id: gameField
         anchors.fill: parent
 
         ClickableImage {
             id: erase
-            x: -67.5 * scale * window.scale
+            x: -208 * scale * window.scale
             y: window.height/2 - erase.height * window.scale / 2
-            scale: window.scale * 0.675
+            scale: window.scale * 0.6
             source: "qrc:/sources/images/eraser.png"
             onClicked: {
-                for(var i=0; i < field.squareR.count; ++i) {
-                    for(var j=0; j < field.squareR.itemAt(i).cellR.count; ++j)
-                        field.squareR.itemAt(i).cellR.itemAt(j).text = "";
-                }
-                field.canvas.clear();
+                field.clear();
+                manager.clearField();
             }
             Behavior on visible {
                 PropertyAnimation { duration: 4000 }
@@ -39,9 +29,6 @@ Item {
 
         Item {
             x: erase.width * erase.scale + window.width * 0.05
-        //Column {
-            //x: erase.width * erase.scale
-            //anchors.horizontalCenter: parent.horizontalCenter
             Text {
                 id: turn
                 text: "Turn: X"
@@ -54,7 +41,7 @@ Item {
             Row {
                 id: score
                 y: window.height * 0.12
-                spacing: 370 * window.scale - oscore.width //
+                spacing: 325 * window.scale - oscore.width //
                 Text {
                     id: oscore
                     text: "O: "
@@ -73,10 +60,13 @@ Item {
             }
             Field {
                 id: field
-                font: turn.font.family
-                y: score.height*1.3 + score.y
-                width: height * 0.75
+                y: score.height + score.y
                 height: window.height - y/2
+                model: 6
+                fontFamily: turn.font.family
+                onClicked: {
+                    manager.registTurn(sIndex, cIndex)
+                }
                 Behavior on visible {
                     PropertyAnimation { duration: 3000 }
                 }
@@ -97,10 +87,10 @@ Item {
 
         onCellFilled: {
             if (manager.crosses_turn) {
-                field.squareR.itemAt(sIndex).cellR.itemAt(cIndex).text = "X";
+                field.squareRepeater.itemAt(sIndex).cellRepeater.itemAt(cIndex).text = "X";
                 turn.text = "Turn: O";
             } else {
-                field.squareR.itemAt(sIndex).cellR.itemAt(cIndex).text = "O";
+                field.squareRepeater.itemAt(sIndex).cellRepeater.itemAt(cIndex).text = "O";
                 turn.text = "Turn: X";
             }
         }
@@ -110,7 +100,7 @@ Item {
             else
                 oscore.text += "I"
 
-            field.canvas.drawLine(bHCoords, bVCoords, eHCoords, eVCoords)
+            field.drawLine(sIndex, bHCoords, bVCoords, eHCoords, eVCoords);
         }
         onErase: {
             xscore.text = "X: "

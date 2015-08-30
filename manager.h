@@ -61,7 +61,7 @@ class Manager : public QObject
     int _square_size_px;
 
     Result_t check(Square board, unsigned cIndex, CellState state);
-    LineCoordinates_t calculate_coordinates(short sIndex, short bIndex, short eIndex);
+    LineCoordinates_t calculate_coordinates(short bIndex, short eIndex);
 
 public:
     explicit Manager(unsigned squares_num = 6, QObject *parent = 0);
@@ -70,7 +70,7 @@ public:
 signals:
     void cellFilled(int cIndex, int sIndex);
     void squareCompleted(int sIndex);
-    void scoreChanged(int bHCoords, int bVCoords, int eHCoords, int eVCoords);
+    void scoreChanged(int sIndex, int bHCoords, int bVCoords, int eHCoords, int eVCoords);
     void erase();
 public slots:
     void registTurn(int, int);

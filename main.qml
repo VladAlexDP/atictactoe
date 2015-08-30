@@ -10,8 +10,8 @@ ApplicationWindow {
     property real scale: width / 800
 
     title: qsTr("ATicTacToe")
-    width: Screen.width
-    height: Screen.height
+    width: 540//Screen.width
+    height: 840//Screen.height
     visible: true
 
     FontLoader { id: sfont; source: "qrc:/sources/fonts/Schoolbell.ttf" }
