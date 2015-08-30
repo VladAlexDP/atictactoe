@@ -6,6 +6,7 @@ Canvas {
     property int cMargin: 10
     property int fSize: 100
     property int bWidth: 3
+    property int lWidth: 10
     property string fFamily: "Arial"
     property alias cellRepeater: cellR
 
@@ -13,13 +14,17 @@ Canvas {
 
     function drawLine(bHCoords, bVCoords, eHCoords, eVCoords) {
         var context = getContext("2d");
-        context.lineWidth = root.lineWidth;
+        context.lineWidth = lWidth;
         context.strokeStyle = "black";
         context.beginPath();
         context.moveTo(bHCoords, bVCoords);
         context.lineTo(eHCoords, eVCoords);
         context.closePath();
         context.stroke();
+    }
+    function clear() {
+        var context = getContext("2d");
+        context.clearRect(0, 0, width, height);
     }
 
     Grid {

@@ -9,7 +9,7 @@ Grid {
     property int fontSize: 100
     property int borderWidth: 3
     property int squareSize: 200
-    property int lineWidth: 4
+    property int lineWidth: 10
     property string fontFamily: "Arial"
     property alias model: squareR.model
     property alias squareRepeater: squareR
@@ -18,12 +18,16 @@ Grid {
 
     function clear() {
         for(var i=0; i < squareR.count; ++i) {
-            for(var j=0; j < squareR.itemAt(i).cellRepeater.count; ++j)
+            squareR.itemAt(i).clear();
+            for(var j=0; j < squareR.itemAt(i).cellRepeater.count; ++j) {
                 squareR.itemAt(i).cellRepeater.itemAt(j).text = "";
-        }
+            }
+            squareR.itemAt(i).requestPaint();
+        }        
     }
     function drawLine(sIndex, bHCoords, bVCoords, eHCoords, eVCoords) {
         squareR.itemAt(sIndex).drawLine(bHCoords, bVCoords, eHCoords, eVCoords);
+        squareR.itemAt(sIndex).requestPaint();
     }
 
     Repeater {
@@ -33,6 +37,7 @@ Grid {
             fSize: root.fontSize
             fFamily: fontFamily
             bWidth: root.borderWidth
+            lWidth: lineWidth
             width: root.squareSize; height: root.squareSize
 
             onClicked: {

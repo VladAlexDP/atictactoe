@@ -14,8 +14,8 @@ Item {
 
         ClickableImage {
             id: erase
-            x: -208 * scale * window.scale
-            y: window.height/2 - erase.height * window.scale / 2
+            x: - 104 *  (1 - window.scale)
+            y: window.height/2 - erase.height * (1- window.scale) / 2
             scale: window.scale * 0.6
             source: "qrc:/sources/images/eraser.png"
             onClicked: {
@@ -64,6 +64,11 @@ Item {
                 height: window.height - y/2
                 model: 6
                 fontFamily: turn.font.family
+                fontSize: 120 * window.scale
+                lineWidth: 10 * window.scale
+                borderWidth: 3 * window.scale
+                squareSize: 300 * window.scale
+                canvasMargin: 20
                 onClicked: {
                     manager.registTurn(sIndex, cIndex)
                 }
@@ -83,7 +88,7 @@ Item {
     Manager {
         id: manager
 
-        square_size_px: field.height / (3 * 1.25) - square_margin
+        square_size_px: field.squareSize
 
         onCellFilled: {
             if (manager.crosses_turn) {
