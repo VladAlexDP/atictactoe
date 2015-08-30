@@ -27,7 +27,7 @@ Item {
             y: 310
             scale: 0.4
             rotation: 90
-            source: "qrc:///images/eraser.png"
+            source: "qrc:/sources/images/eraser.png"
             onClicked: {
                 for(var i=0; i < field.squareR.count; ++i) {
                     for(var j=0; j < field.squareR.itemAt(i).cellR.count; ++j)
@@ -44,28 +44,28 @@ Item {
             x: 100
             y: 15
             Column {
-                spacing: 19
+                spacing: 19 //
                 Text {
                     id: turn
-                    text: "X's turn"
-                    font.pixelSize: 50
+                    text: "Turn: X"
+                    font.pixelSize: 50 //
                     Behavior on visible {
                         PropertyAnimation { duration: 1000 }
                     }
                 }
                 Row {
                     id: score
-                    spacing: 250 - oscore.width
+                    spacing: 250 - oscore.width //
                     Text {
                         id: oscore
                         text: "O: "
-                        font.pixelSize: 50
+                        font.pixelSize: 50 //
                         font.family: turn.font.family
                     }
                     Text {
                         id: xscore
                         text: "X: "
-                        font.pixelSize: 50
+                        font.pixelSize: 50 //
                         font.family: turn.font.family
                     }
                     Behavior on visible {
@@ -74,6 +74,7 @@ Item {
                 }
                 Field {
                     id: field
+                    font: turn.font.family
                     Behavior on visible {
                         PropertyAnimation { duration: 3000 }
                     }
@@ -92,11 +93,11 @@ Item {
         id: manager
         onCellFilled: {
             if (manager.crosses_turn) {
-                field.squareR.itemAt(sIndex).cellR.itemAt(cIndex).isource = "qrc:///images/XRed1.png";
-                turn.text = "O's turn";
+                field.squareR.itemAt(sIndex).cellR.itemAt(cIndex).isource = "X";
+                turn.text = "Turn: O";
             } else {
-                field.squareR.itemAt(sIndex).cellR.itemAt(cIndex).isource = "qrc:///images/ORed1.png";
-                turn.text = "X's turn";
+                field.squareR.itemAt(sIndex).cellR.itemAt(cIndex).isource = "O";
+                turn.text = "Turn: X";
             }
         }
         onScoreChanged: {
@@ -110,7 +111,7 @@ Item {
         onErase: {
             xscore.text = "X: "
             oscore.text = "O: "
-            turn.text = "X's turn"
+            turn.text = "Turn: X"
         }
     }
 }

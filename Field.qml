@@ -5,9 +5,10 @@ Item {
 
     property alias squareR: squareR
     property alias canvas: canvas
+    property string font
 
-    width: 600
-    height: 600
+    width: 600 //
+    height: 600 //
 
     Canvas {
         id: canvas        
@@ -16,7 +17,7 @@ Item {
             var context = getContext("2d");
             context.strokeStyle = "black";
             context.beginPath();
-            context.lineWidth = 5;
+            context.lineWidth = 5; //
             context.moveTo(bHCoords, bVCoords);
             context.lineTo(eHCoords, eVCoords);
             context.stroke();
@@ -38,8 +39,7 @@ Item {
     Grid {
         columns: 2
         rows: 3
-        spacing: manager.square_margin / 10 - 1
-        //x: 0; y: 0
+        spacing: manager.square_margin / 10 - 1        
 
         Repeater {
             id: squareR
@@ -56,7 +56,7 @@ Item {
                     model: 9
                     id: cellR
                     Rectangle {
-                        property alias isource: image.source
+                        property alias isource: image.text
 
                         width: root.width/9
                         height: width
@@ -68,9 +68,11 @@ Item {
                             anchors.fill: parent
                             onClicked: manager.registTurn(index, sqIndex)
                         }
-                        Image {
+                        Text {
                             id: image
-                            anchors.fill: parent
+                            anchors.centerIn: parent
+                            font.pixelSize: 80 //
+                            font.family: root.font
                         }
                     }
                 }

@@ -13,9 +13,7 @@ int main(int argc, char *argv[])
     //engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     QQmlComponent component(&engine,
             QUrl(QStringLiteral("qrc:/main.qml")));
-    QObject *object = component.create();
+    /*QObject *object = */component.create();
 
-
-    //delete object;
     return app.exec();
 }
