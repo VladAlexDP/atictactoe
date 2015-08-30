@@ -6,9 +6,12 @@ import com.ics.demo 1.0
 
 ApplicationWindow {
     id: window
+
+    property real scale: width / 800
+
     title: qsTr("ATicTacToe")
-    width: 540
-    height: 840
+    width: Screen.width
+    height: Screen.height
     visible: true
 
     FontLoader { id: sfont; source: "qrc:/sources/fonts/Schoolbell.ttf" }
@@ -40,7 +43,7 @@ ApplicationWindow {
                 anchors.centerIn: parent
                 ClickableText {
                     text: "Play"
-                    textSize: 70
+                    textSize: 120 * scale
                     fontFamily: sfont.name
                     onClicked: {
                         flipable.state =  "play"
@@ -49,7 +52,7 @@ ApplicationWindow {
                 }
                 ClickableText {
                     text: "Exit"
-                    textSize: 70
+                    textSize: 120 * scale //
                     fontFamily: sfont.name
                     onClicked: {
                         close()

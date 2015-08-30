@@ -10,7 +10,7 @@
     </qresource>
     <qresource prefix="/sources">
         <file>images/bg.jpg</file>
-        <file>images/eraser.png</file>
         <file>fonts/Schoolbell.ttf</file>
+        <file>images/eraser.png</file>
     </qresource>
 </RCC>

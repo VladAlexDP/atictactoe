@@ -11,7 +11,7 @@ Item {
     height: image.height
 
     Image {
-        id: image
+        id: image        
         MouseArea {
             anchors.fill: parent
             onClicked: root.clicked()

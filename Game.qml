@@ -16,22 +16,19 @@ Item {
 
     Item {
     //Row {
-        //x: -110
         id: gameField
+        anchors.fill: parent
 
         ClickableImage {
             id: erase
-            width: 200
-            height: 500
-            x: -110
-            y: 310
-            scale: 0.4
-            rotation: 90
+            x: -67.5 * scale * window.scale
+            y: window.height/2 - erase.height * window.scale / 2
+            scale: window.scale * 0.675
             source: "qrc:/sources/images/eraser.png"
             onClicked: {
                 for(var i=0; i < field.squareR.count; ++i) {
                     for(var j=0; j < field.squareR.itemAt(i).cellR.count; ++j)
-                        field.squareR.itemAt(i).cellR.itemAt(j).isource = "";
+                        field.squareR.itemAt(i).cellR.itemAt(j).text = "";
                 }
                 field.canvas.clear();
             }
@@ -41,47 +38,51 @@ Item {
         }
 
         Item {
-            x: 100
-            y: 15
-            Column {
-                spacing: 19 //
-                Text {
-                    id: turn
-                    text: "Turn: X"
-                    font.pixelSize: 50 //
-                    Behavior on visible {
-                        PropertyAnimation { duration: 1000 }
-                    }
-                }
-                Row {
-                    id: score
-                    spacing: 250 - oscore.width //
-                    Text {
-                        id: oscore
-                        text: "O: "
-                        font.pixelSize: 50 //
-                        font.family: turn.font.family
-                    }
-                    Text {
-                        id: xscore
-                        text: "X: "
-                        font.pixelSize: 50 //
-                        font.family: turn.font.family
-                    }
-                    Behavior on visible {
-                        PropertyAnimation { duration: 2000 }
-                    }
-                }
-                Field {
-                    id: field
-                    font: turn.font.family
-                    Behavior on visible {
-                        PropertyAnimation { duration: 3000 }
-                    }
+            x: erase.width * erase.scale + window.width * 0.05
+        //Column {
+            //x: erase.width * erase.scale
+            //anchors.horizontalCenter: parent.horizontalCenter
+            Text {
+                id: turn
+                text: "Turn: X"
+                font.pixelSize: 85 * window.scale //
+                y: window.height * 0.1 /2
+                Behavior on visible {
+                    PropertyAnimation { duration: 1000 }
                 }
             }
-
+            Row {
+                id: score
+                y: window.height * 0.12
+                spacing: 370 * window.scale - oscore.width //
+                Text {
+                    id: oscore
+                    text: "O: "
+                    font.pixelSize: 85 * window.scale //
+                    font.family: turn.font.family
+                }
+                Text {
+                    id: xscore
+                    text: "X: "
+                    font.pixelSize: 85 * window.scale //
+                    font.family: turn.font.family
+                }
+                Behavior on visible {
+                    PropertyAnimation { duration: 2000 }
+                }
+            }
+            Field {
+                id: field
+                font: turn.font.family
+                y: score.height*1.3 + score.y
+                width: height * 0.75
+                height: window.height - y/2
+                Behavior on visible {
+                    PropertyAnimation { duration: 3000 }
+                }
+            }
         }
+
         onVisibleChanged:  {
             field.visible = visible;
             score.visible = visible;
@@ -91,12 +92,15 @@ Item {
     }
     Manager {
         id: manager
+
+        square_size_px: field.height / (3 * 1.25) - square_margin
+
         onCellFilled: {
             if (manager.crosses_turn) {
-                field.squareR.itemAt(sIndex).cellR.itemAt(cIndex).isource = "X";
+                field.squareR.itemAt(sIndex).cellR.itemAt(cIndex).text = "X";
                 turn.text = "Turn: O";
             } else {
-                field.squareR.itemAt(sIndex).cellR.itemAt(cIndex).isource = "O";
+                field.squareR.itemAt(sIndex).cellR.itemAt(cIndex).text = "O";
                 turn.text = "Turn: X";
             }
         }

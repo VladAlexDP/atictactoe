@@ -94,11 +94,11 @@ Manager::Result_t Manager::check(Square board, unsigned cIndex, CellState state)
 Manager::LineCoordinates_t Manager::calculate_coordinates(short sIndex, short bIndex, short eIndex)
 {
     int n = sqrt(CELLS_NUM);
-    int cell_size_px = SQUARE_SIZE_PX / n;
+    int cell_size_px = _square_size_px / n;
 
     //absolute coords
-    int sHCoords = sIndex%2 * (SQUARE_SIZE_PX + SQUARE_MARGIN_PX);
-    int sVCoords = floor(sIndex/2) * (SQUARE_SIZE_PX + SQUARE_MARGIN_PX);
+    int sHCoords = sIndex%2 * (_square_size_px + SQUARE_MARGIN_PX);
+    int sVCoords = floor(sIndex/2) * (_square_size_px + SQUARE_MARGIN_PX);
 
     //relative coords
     int bHCoords = bIndex%n        * cell_size_px;

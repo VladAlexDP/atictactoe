@@ -21,10 +21,11 @@ class Manager : public QObject
     Q_PROPERTY(bool crosses_turn MEMBER _crosses_turn)
     Q_PROPERTY(int crosses_score MEMBER _crosses_score)
     Q_PROPERTY(int noughts_score MEMBER _noughts_score)
-    Q_PROPERTY(int square_margin READ square_margin CONSTANT)
+    Q_PROPERTY(int square_size_px MEMBER _square_size_px)
+    Q_PROPERTY(int square_margin READ square_margin CONSTANT)    
 
     static const int CELLS_NUM = 9;
-    static const int SQUARE_SIZE_PX = 194;
+
     static const int SQUARE_MARGIN_PX = 18;
     static const int RAND_FACTOR = 8;
 
@@ -57,13 +58,14 @@ class Manager : public QObject
     Score_t _noughts_score;
     Field_t _field;
     bool _crosses_turn;
+    int _square_size_px;
 
     Result_t check(Square board, unsigned cIndex, CellState state);
     LineCoordinates_t calculate_coordinates(short sIndex, short bIndex, short eIndex);
 
 public:
     explicit Manager(unsigned squares_num = 6, QObject *parent = 0);
-    int square_margin() { return SQUARE_SIZE_PX; }
+    int square_margin() { return SQUARE_MARGIN_PX; }
 
 signals:
     void cellFilled(int cIndex, int sIndex);
