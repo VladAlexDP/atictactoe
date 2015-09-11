@@ -1,9 +1,11 @@
 TEMPLATE = app
 
-QT += qml quick widgets
+QT += qml quick widgets bluetooth
 
 SOURCES += main.cpp \
-    manager.cpp
+    manager.cpp \
+    bluetoothserver.cpp \
+    bluetoothclient.cpp
 
 RESOURCES += qml.qrc
 
@@ -14,6 +16,8 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 HEADERS += \
-    manager.h
+    manager.h \
+    bluetoothserver.h \
+    bluetoothclient.h
 
 QMAKE_CXXFLAGS += -std=c++11

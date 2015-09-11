@@ -1,7 +1,7 @@
 #include "manager.h"
 
 Manager::Manager(unsigned squares_num, QObject *parent)
-    : QObject(parent), _field(squares_num), _crosses_score(), _noughts_score(), _crosses_turn(true)
+    : QObject(parent),  _crosses_score(), _noughts_score(), _field(squares_num), _crosses_turn(true)
 {
 
 }
@@ -17,6 +17,7 @@ void Manager::registTurn(int sIndex, int cIndex)
 
     emit cellFilled(cIndex, sIndex);
     Manager::Result_t r = check(sq, cIndex, _crosses_turn ? Cross : Nought);
+    // is someone scored
     if(std::get<0>(r)) {
         _crosses_turn ? _crosses_score++ : _noughts_score++;
         Manager::LineCoordinates_t lineCoordinates = calculate_coordinates(std::get<1>(r), std::get<2>(r));
@@ -24,6 +25,7 @@ void Manager::registTurn(int sIndex, int cIndex)
                           lineCoordinates.second.first, lineCoordinates.second.second);
         emit squareCompleted(sIndex);
         sq.completed = true;
+    // square is full
     } else if(sq.num == 9) {
         emit squareCompleted(sIndex);
         sq.completed = true;
@@ -83,7 +85,7 @@ Manager::Result_t Manager::check(Square board, unsigned cIndex, CellState state)
     //check anti diag
     for(int i = 0; i<n && board[i + ((n-1)-i)*n] == state;i++){
         if(i == n-1) {
-            end = 6; ///TODO
+            end = n*(n-1); ///TODO
             return Manager::Result_t(true, begin, end);
         }
     }
@@ -96,13 +98,14 @@ Manager::LineCoordinates_t Manager::calculate_coordinates(short bIndex, short eI
     int n = sqrt(CELLS_NUM);
     int cell_size_px = _square_size_px / n;
 
-    //relative coords
+    //! [Relative coords calculation]
     int bHCoords = bIndex%n        * cell_size_px;
     int bVCoords = floor(bIndex/n) * cell_size_px;
     int eHCoords = eIndex%n        * cell_size_px;
     int eVCoords = floor(eIndex/n) * cell_size_px;
+    //! [Relative coords calculation]
 
-    //correction of line
+    //! [Correction of line depending on geometry]
     if(bHCoords == eHCoords) {
         bHCoords += cell_size_px/2;
         eHCoords += cell_size_px/2;
@@ -118,12 +121,14 @@ Manager::LineCoordinates_t Manager::calculate_coordinates(short bIndex, short eI
         bHCoords += cell_size_px;
         eVCoords += cell_size_px;
     }
+    //! [Correction of line depending on geometry]
 
-    //adding some rand values to look natural
-    bHCoords += qrand() % RAND_FACTOR;
-    bVCoords += qrand() % RAND_FACTOR;
-    eHCoords += qrand() % RAND_FACTOR;
-    eVCoords += qrand() % RAND_FACTOR;
+    //! [Adding some rand values to look natural]
+    bHCoords += RAND_FACTOR / 2 - qrand() % RAND_FACTOR;
+    bVCoords += RAND_FACTOR / 2 - qrand() % RAND_FACTOR;
+    eHCoords += RAND_FACTOR / 2 - qrand() % RAND_FACTOR;
+    eVCoords += RAND_FACTOR / 2 - qrand() % RAND_FACTOR;
+    //! [Adding some rand values to look natural]
 
     return Manager::LineCoordinates_t(Manager::Coordinates_t(bHCoords, bVCoords),
                                       Manager::Coordinates_t(eHCoords, eVCoords));

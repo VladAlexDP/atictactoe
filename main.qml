@@ -10,135 +10,149 @@ ApplicationWindow {
     property real scale: width / 800
 
     title: qsTr("ATicTacToe")
-    width: Screen.width
     height: Screen.height
     visible: true
 
     FontLoader { id: sfont; source: "qrc:/sources/fonts/Schoolbell.ttf" }
+    Item {
+        Flipable {
+            id: flipable
 
-    Flipable {
-        id: flipable
+            property bool flipped: false
 
-        property bool flipped: false
+            state: "menu"
+            width: window.width
+            height: window.height
 
-        state: "menu"
-        width: window.width
-        height: window.height
+            transform: Rotation {
+                id: rot
+                angle: 0
+                origin.x: 0
+                origin.y: flipable.height/2
+                axis.x: 0; axis.y: -1; axis.z: 0
+            }
+            front: Image {
+                id: menuForm
 
-        transform: Rotation {
-            id: rot
-            angle: 0
-            origin.x: 0
-            origin.y: flipable.height/2
-            axis.x: 0; axis.y: -1; axis.z: 0
+                source: "qrc:/sources/images/bg.jpg"
+                width: window.width
+                height: window.height
+                mirror: true
+                z: -1
+
+                Column {
+                    id: menu
+                    anchors.centerIn: parent
+                    ClickableText {
+                        text: "Ofline"
+                        textSize: 120 * scale
+                        fontFamily: sfont.name
+                        onClicked: {
+                            flipable.state =  "play"
+                            console.log("Stage changed to " + flipable.state)
+                        }
+                    }
+                    ClickableText {
+                        text: "Online"
+                        textSize: 120 * scale //
+                        fontFamily: sfont.name
+                        onClicked: {
+
+                        }
+                    }
+                    ClickableText {
+                        text: "Exit"
+                        textSize: 120 * scale //
+                        fontFamily: sfont.name
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        onClicked: {
+                            close()
+                        }
+                    }
+                }
+
+            }
+
+            back: MainForm {
+                id: gameForm
+                width: window.width
+                height: window.height
+                font: sfont.name
+            }
+
+            states: [
+                State {
+                    name: "menu"
+                    PropertyChanges {
+                        target: rot;
+                        angle: 0;
+                    }
+                    PropertyChanges {
+                        target: gameForm;
+                        visible: false;
+                    }
+                    PropertyChanges {
+                        target: menuForm;
+                        enabled: true;
+                    }
+                    PropertyChanges {
+                        target: flipable
+                        x: 0
+                    }
+                    PropertyChanges {
+                        target: bg
+                        x: 0
+                    }
+                },
+                State {
+                    name: "play"
+                    PropertyChanges {
+                        target: rot;
+                        angle: 180;
+                    }
+                    PropertyChanges {
+                        target: gameForm;
+                        visible: true;
+                    }
+                    PropertyChanges {
+                        target: menuForm;
+                        enabled: false;
+                    }
+                    PropertyChanges {
+                        target: flipable
+                        x: width
+                    }
+                    PropertyChanges {
+                        target: bg
+                        x: width
+                    }
+                }
+            ]
+            transitions: [
+                Transition {
+                    from: "menu"; to: "play"
+                    SequentialAnimation {
+                        NumberAnimation { target: rot; property: "angle"; duration: 1000 }
+                        PropertyAnimation { target: gameForm; property: "visible"; }
+                        ParallelAnimation {
+                            NumberAnimation { target: flipable; property: "x"; duration: 500 }
+                            NumberAnimation { target: bg; property: "x"; duration: 500 }
+                        }
+                    }
+                },
+                Transition {
+                    from: "play"; to: "menu"
+                    NumberAnimation { target: rot; property: "angle"; duration: 1000 }
+                }
+            ]
         }
-        front: Image {
-            id: menuForm
+        Image {
+            id: bg
             source: "qrc:/sources/images/bg.jpg"
             width: window.width
             height: window.height
             mirror: true
-
-            Column {
-                anchors.centerIn: parent
-                ClickableText {
-                    text: "Play"
-                    textSize: 120 * scale
-                    fontFamily: sfont.name
-                    onClicked: {
-                        flipable.state =  "play"
-                        console.log("Stage changed to " + flipable.state)
-                    }
-                }
-                ClickableText {
-                    text: "Exit"
-                    textSize: 120 * scale //
-                    fontFamily: sfont.name
-                    onClicked: {
-                        close()
-                    }
-                }
-            }
+            z: -1
         }
-
-        back: MainForm {
-            id: gameForm
-            font: sfont.name
-        }
-
-        states: [
-            State {
-                name: "menu"
-                PropertyChanges {
-                    target: rot;
-                    angle: 0;
-                }
-                PropertyChanges {
-                    target: gameForm;
-                    visible: false;
-                }
-                PropertyChanges {
-                    target: menuForm;
-                    enabled: true;
-                }
-                PropertyChanges {
-                    target: flipable
-                    x: 0
-                }
-                PropertyChanges {
-                    target: bg
-                    x: 0
-                }
-            },
-            State {
-                name: "play"
-                PropertyChanges {
-                    target: rot;
-                    angle: 180;
-                }
-                PropertyChanges {
-                    target: gameForm;
-                    visible: true;
-                }
-                PropertyChanges {
-                    target: menuForm;
-                    enabled: false;
-                }
-                PropertyChanges {
-                    target: flipable
-                    x: width
-                }
-                PropertyChanges {
-                    target: bg
-                    x: width
-                }
-            }
-        ]
-        transitions: [
-            Transition {
-                from: "menu"; to: "play"
-                SequentialAnimation {
-                    NumberAnimation { target: rot; property: "angle"; duration: 1000 }
-                    PropertyAnimation { target: gameForm; property: "visible"; }
-                    ParallelAnimation {
-                        NumberAnimation { target: flipable; property: "x"; duration: 500 }
-                        NumberAnimation { target: bg; property: "x"; duration: 500 }
-                    }                    
-                }
-            },
-            Transition {
-                from: "play"; to: "menu"
-                NumberAnimation { target: rot; property: "angle"; duration: 1000 }
-            }
-        ]
-    }
-    Image {
-        id: bg
-
-        source: "qrc:/sources/images/bg.jpg"
-        width: window.width
-        height: window.height
-        mirror: true
-        z: -1
     }
 }

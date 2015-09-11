@@ -17,7 +17,5 @@ Item {
             onClicked: root.clicked()
         }
     }
-
-
 }
 
