@@ -5,7 +5,6 @@ Grid {
 
     rows: 3; columns: 2
 
-    property int canvasMargin: 10
     property int fontSize: 100
     property int borderWidth: 3
     property int squareSize: 200
@@ -33,12 +32,11 @@ Grid {
     Repeater {
         id: squareR
         Square {
-            cMargin: root.canvasMargin
             fSize: root.fontSize
             fFamily: fontFamily
             bWidth: root.borderWidth
             lWidth: lineWidth
-            width: root.squareSize; height: root.squareSize
+            width: root.squareSize; height: width
 
             onClicked: {
                 root.clicked(index, cIndex);

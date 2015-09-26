@@ -1,17 +1,21 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>Field.qml</file>
-        <file>ClickableImage.qml</file>
-        <file>MainForm.qml</file>
-        <file>ClickableText.qml</file>
-        <file>Menu.qml</file>
-        <file>Game.qml</file>
-        <file>Square.qml</file>
     </qresource>
     <qresource prefix="/sources">
         <file>images/bg.jpg</file>
         <file>fonts/Schoolbell.ttf</file>
         <file>images/eraser.png</file>
+        <file>images/bg_new.png</file>
+    </qresource>
+    <qresource prefix="/components">
+        <file alias="MainForm.qml">components/MainForm.qml</file>
+        <file alias="Menu.qml">components/Menu.qml</file>
+        <file alias="Square.qml">components/Square.qml</file>
+        <file alias="ClickableImage.qml">components/ClickableImage.qml</file>
+        <file alias="ClickableText.qml">components/ClickableText.qml</file>
+        <file alias="Field.qml">components/Field.qml</file>
+        <file alias="Game.qml">components/Game.qml</file>
+        <file alias="SmartBG.qml">components/SmartBG.qml</file>
     </qresource>
 </RCC>

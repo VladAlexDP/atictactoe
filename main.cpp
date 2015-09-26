@@ -3,7 +3,7 @@
 #include <QDesktopWidget>
 #include <QQmlProperty>
 
-#include "manager.h"
+#include "cpp/manager.h"
 
 int main(int argc, char *argv[])
 {
@@ -17,11 +17,11 @@ int main(int argc, char *argv[])
     QObject *object = component.create();
 
     QRect rec = QApplication::desktop()->screenGeometry();
-#if (defined(__linux__) || defined(__MINGW32__))
+/*#if (defined(__linux__) || defined(__MINGW32__))
     QQmlProperty(object, "width").write(rec.width() / 3);
 #elif defined(__ANDROID__)
     QQmlProperty(object, "width").write(rec.width());
-#endif
+#endif*/
 
     return app.exec();
 }
