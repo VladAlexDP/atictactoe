@@ -8,7 +8,11 @@ Item {
     property alias gameField: gameField
     property alias font: turn.font.family
 
-    //FontLoader { id: sfont; source: "qrc:/sources/fonts/Schoolbell.ttf";}
+    function makeVisible() {
+        field.visible = true;
+        score.visible = true;
+        turn.visible =  true;
+    }
 
     Item {
         id: gameField
@@ -23,12 +27,17 @@ Item {
             text: "Turn: O"
             font.pixelSize: 35 * window.scale
             font.family: sfont.name
+            visible: false;
+            Behavior on visible  {
+                PropertyAnimation { duration: 750  }
+            }
         }
         Row {
             id: score
             anchors.top: turn.bottom
             anchors.topMargin: -16 * window.scale
             spacing: 250 * window.scale - oscore.width
+            visible: false;
             Text {
                 id: oscore
                 text: "O: "
@@ -41,6 +50,9 @@ Item {
                 font.pixelSize: 30 * window.scale
                 font.family: turn.font.family
             }
+            Behavior on visible  {
+                PropertyAnimation { duration: 1500  }
+            }
         }
         Field {
             id: field
@@ -52,20 +64,14 @@ Item {
             borderWidth: 2 * window.scale
             squareSize: 157 * window.scale
             spacing: 26 * window.scale
+            visible: false;
             onClicked: {
                 manager.registTurn(sIndex, cIndex)
             }
-            Behavior on visible {
-                PropertyAnimation { duration: 3000 }
+            Behavior on visible  {
+                PropertyAnimation { duration: 2250  }
             }
-        }
-
-        onVisibleChanged:  {
-            field.visible = visible;
-            score.visible = visible;
-            turn.visible = visible;
-            erase.visible = visible;
-        }
+        }        
     }
     Manager {
         id: manager

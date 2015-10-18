@@ -51,6 +51,7 @@ Item {
         Loader {
             id: loader
             anchors.fill: parent
+            onItemChanged: item.makeVisible();
         }
         Connections {
             target: loader.item
@@ -97,12 +98,6 @@ Item {
                     target: loader;
                     properties: "source"
                     to: "Game.qml"
-                }
-                PropertyAnimation {
-                    target: loader.item;
-                    properties: "visible"
-                    from: false
-                    to: true
                 }
             }
         }
