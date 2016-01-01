@@ -1,14 +1,21 @@
 #include "manager.h"
 
 Manager::Manager(unsigned squares_num, QObject *parent)
-    : QObject(parent),  _crosses_score(), _noughts_score(), _field(squares_num), _crosses_turn(true)
+    : QObject(parent),
+      _crosses_score(),
+      _noughts_score(),
+      _field_list(),
+      _crosses_turn(true),
+      _squares_num(squares_num),
+      _gestures()
 {
-
+    _field_list.push_back(Field(_squares_num));
+    _current_field = _field_list.begin();
 }
 
 void Manager::registTurn(int sIndex, int cIndex)
 {
-    Square& sq = _field[sIndex];
+    Square& sq = (*_current_field)[sIndex];
     if (sq.completed || sq[cIndex] != EmptyCell)
         return;    
 
@@ -16,32 +23,50 @@ void Manager::registTurn(int sIndex, int cIndex)
     sq.num++;
 
     emit cellFilled(cIndex, sIndex);
-    Manager::Result_t r = check(sq, cIndex, _crosses_turn ? Cross : Nought);
-    // is someone scored
-    if(std::get<0>(r)) {
-        _crosses_turn ? _crosses_score++ : _noughts_score++;
-        Manager::LineCoordinates_t lineCoordinates = calculate_coordinates(std::get<1>(r), std::get<2>(r));
-        emit scoreChanged(sIndex, lineCoordinates.first.first, lineCoordinates.first.second,
-                          lineCoordinates.second.first, lineCoordinates.second.second);
-        emit squareCompleted(sIndex);
-        sq.completed = true;
-    // square is full
-    } else if(sq.num == 9) {
-        emit squareCompleted(sIndex);
-        sq.completed = true;
-    }
+    check_square(sIndex, cIndex, _crosses_turn);
 
     _crosses_turn = !_crosses_turn;
 }
 
 void Manager::clearField()
 {
-    for(Square& s: _field)
+    for(Square& s: *_current_field)
         s.clear();
     _crosses_score = 0;
     _noughts_score = 0;
     _crosses_turn = true;
     emit erase();
+}
+
+void Manager::next()
+{
+    for(unsigned i = 0; i < _squares_num; ++i)
+        (*_current_field)[i].completed = false;
+    if(_current_field == _field_list.end() - 1)
+        _field_list.push_back(Field(_squares_num));
+    _current_field = _field_list.end() - 1;
+    fill_field();
+}
+
+void Manager::prev()
+{
+    for(unsigned i = 0; i < _squares_num; ++i)
+        (*_current_field)[i].completed = false;
+    if(_current_field != _field_list.begin()) {
+        --_current_field;
+        fill_field();
+    }
+}
+
+void Manager::recGesture(double angle)
+{
+    if(angle > 70 && angle < 110) {
+        emit prevPage();
+        prev();
+    } else if(angle < -70 && angle > -110) {
+        emit nextPage();
+        next();
+    }
 }
 
 Manager::Result_t Manager::check(Square board, unsigned cIndex, CellState state)
@@ -85,12 +110,33 @@ Manager::Result_t Manager::check(Square board, unsigned cIndex, CellState state)
     //check anti diag
     for(int i = 0; i<n && board[i + ((n-1)-i)*n] == state;i++){
         if(i == n-1) {
-            end = n*(n-1); ///TODO
+            end = n*(n-1);
             return Manager::Result_t(true, begin, end);
         }
     }
 
     return std::tuple<bool, short, short>(false, 0, 0);
+}
+
+void Manager::check_square(unsigned sIndex, unsigned cIndex, bool _crosses_turn)
+{
+    Square& sq = (*_current_field)[sIndex];
+    if(sq.completed)
+        return;
+    Manager::Result_t r = check(sq, cIndex, _crosses_turn ? Cross : Nought);
+    // is someone scored
+    if(std::get<0>(r)) {
+        _crosses_turn ? _crosses_score++ : _noughts_score++;
+        Manager::LineCoordinates_t lineCoordinates = calculate_coordinates(std::get<1>(r), std::get<2>(r));
+        emit scoreChanged(sIndex, lineCoordinates.first.first, lineCoordinates.first.second,
+                          lineCoordinates.second.first, lineCoordinates.second.second);
+        emit squareCompleted(sIndex);
+        sq.completed = true;
+    // square is full
+    } else if(sq.num == 9) {
+        emit squareCompleted(sIndex);
+        sq.completed = true;
+    }
 }
 
 Manager::LineCoordinates_t Manager::calculate_coordinates(short bIndex, short eIndex)
@@ -134,4 +180,29 @@ Manager::LineCoordinates_t Manager::calculate_coordinates(short bIndex, short eI
                                       Manager::Coordinates_t(eHCoords, eVCoords));
 }
 
+void Manager::fill_field()
+{
+    emit erase();
+    _crosses_turn = (*_current_field).crosses_turn();
+    _crosses_score = (*_current_field).crosses_score();
+    _noughts_score = (*_current_field).noughts_score();
+    for(unsigned i = 0; i < _squares_num; ++i) {
+        for(unsigned j = 0; j < 9; ++j) {
+            if((*_current_field)[i][j] == CellState::Cross) {
+                emit fillCell(i, j, true);
+                check_square(i, j, true);
+            } else if((*_current_field)[i][j] == CellState::Nought) {
+                emit fillCell(i, j, false);
+                check_square(i, j, false);
+            }
+        }
+    }
+}
 
+Manager::Field::Field(unsigned size)
+    : _squares(size),
+      _crosses_score(0),
+      _noughts_score(0),
+      _crosses_turn(true)
+{
+}

@@ -24,6 +24,9 @@ Grid {
             squareR.itemAt(i).requestPaint();
         }        
     }
+    function fillCell(squareNum, cellNum, cross) {
+        squareR.itemAt(squareNum).cellRepeater.itemAt(cellNum).text = cross ? "X" : "O";
+    }
     function drawLine(sIndex, bHCoords, bVCoords, eHCoords, eVCoords) {
         squareR.itemAt(sIndex).drawLine(bHCoords, bVCoords, eHCoords, eVCoords);
         squareR.itemAt(sIndex).requestPaint();

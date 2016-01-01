@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.4
 
 Canvas {
     id: root
@@ -31,7 +31,7 @@ Canvas {
 
         width: parent.width
         height: parent.height
-        columns: 3; rows: 3;
+        columns: 3; rows: 3;        
 
         Repeater {
             id: cellR

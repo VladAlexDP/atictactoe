@@ -17,5 +17,6 @@
         <file alias="Field.qml">components/Field.qml</file>
         <file alias="Game.qml">components/Game.qml</file>
         <file alias="SmartBG.qml">components/SmartBG.qml</file>
+        <file>components/SwipeMouseArea.qml</file>
     </qresource>
 </RCC>

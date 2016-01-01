@@ -1,4 +1,5 @@
-import QtQuick 2.0
+import QtQuick 2.4
+import com.ics.demo 1.0
 
 Item {
     id: root
@@ -6,7 +7,7 @@ Item {
 
     property alias loader: loader
 
-    state: "menu"
+    state: "menu"    
 
     Image {
         id: loaderBackground
@@ -46,10 +47,14 @@ Item {
                 from: 90
                 to: 0
             }
-        }
+        }        
 
         Loader {
             id: loader
+
+            property alias next: next
+            property alias prev: prev
+
             anchors.fill: parent
             onItemChanged: item.makeVisible();
         }
@@ -64,8 +69,7 @@ Item {
         z: -2
         anchors.fill: parent
         source: "qrc:/sources/images/bg_new.png"
-    }
-
+    }    
 
     states: [
         State {

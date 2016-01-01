@@ -1,5 +1,7 @@
 #include "bluetoothclient.h"
 
+#include <string>
+
 BluetoothClient::BluetoothClient(QObject *parent)
     : QObject(parent), socket(0)
 {
@@ -45,9 +47,9 @@ void BluetoothClient::readSocket()
     while (socket->canReadLine()) {
         std::string line = socket->readLine().trimmed().toStdString();
         std::size_t pos = line.find(' ');
-        int sIndex = std::stoi(line.substr(0, pos));
-        int cIndex = std::stoi(line.substr(pos, line.length()));
-        emit turnReceived(socket->peerName(), sIndex, cIndex);
+        //int sIndex = std::stoi(line.substr(0, pos));
+        //int cIndex = std::stoi(line.substr(pos, line.length()));
+        //emit turnReceived(socket->peerName(), sIndex, cIndex);
     }
 }
 //! [readSocket]
