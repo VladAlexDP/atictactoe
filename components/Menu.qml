@@ -15,8 +15,8 @@ Item {
             textSize: 140 * scale
             fontFamily: sfont.name
             onClicked: {
-                play()
-                console.log("Stage changed to " + root.state)
+                play();
+                console.log("Stage changed to " + root.state);
             }
         }
         ClickableText {
@@ -34,7 +34,7 @@ Item {
             textSize: 140 * scale
             fontFamily: sfont.name
             onClicked: {
-                close()
+                close();
             }
         }
     }

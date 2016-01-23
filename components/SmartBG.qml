@@ -9,6 +9,15 @@ Item {
 
     state: "menu"    
 
+    focus: true;
+
+    Keys.onReleased: {
+        if (event.key == Qt.Key_Back) {
+                state = "menu";
+                event.accepted = true
+            }
+    }
+
     Image {
         id: loaderBackground
         anchors.fill: parent
@@ -108,6 +117,23 @@ Item {
                     target: loader;
                     properties: "source"
                     to: "Game.qml"
+                }
+            }
+        },
+        Transition {
+            from: "play"
+            to: "menu"
+            SequentialAnimation {
+                PropertyAnimation {
+                    target: loader;
+                    properties: "source"
+                    to: "Menu.qml"
+                }
+                ScriptAction {
+                    script: prev.start()
+                }
+                PauseAnimation {
+                    duration: 700
                 }
             }
         }

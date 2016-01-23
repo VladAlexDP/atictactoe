@@ -1,5 +1,6 @@
 import QtQuick 2.4
 import QtQuick.Window 2.2
+import QtQuick.Controls 1.4
 import "./components"
 
 Item {
@@ -10,6 +11,8 @@ Item {
     visible: true;
     height: 1920 * scale;
     width: 1080 * scale;
+
+
 
     FontLoader { id: sfont; source: "qrc:/sources/fonts/Schoolbell.ttf";}
     SmartBG {
