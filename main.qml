@@ -6,7 +6,7 @@ import "./components"
 Item {
     id: window
 
-    property double scale: Math.min((Screen.height/*-61.5*/)/1920, Screen.width / 1080);
+    property double scale: Math.min((Screen.height)/1920, Screen.width / 1080);
 
     visible: true;
     height: 1920 * scale;
