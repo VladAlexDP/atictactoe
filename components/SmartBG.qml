@@ -13,6 +13,9 @@ Item {
         id: loaderBackground
         anchors.fill: parent
         source: "qrc:/sources/images/ATTTBG.png"
+        fillMode: Image.PreserveAspectFit;
+        width: 1080 * window.scale;
+        height: 1920 * window.scale;
         transform: Rotation {
             id: rotation
             angle: 0
@@ -69,6 +72,9 @@ Item {
         z: -2
         anchors.fill: parent
         source: "qrc:/sources/images/ATTTBG.png"
+        fillMode: Image.PreserveAspectFit;
+        width: 1080 * window.scale;
+        height: 1920 * window.scale;
     }    
 
     states: [

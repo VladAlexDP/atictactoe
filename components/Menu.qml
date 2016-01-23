@@ -8,10 +8,11 @@ Item {
     Column {
         id: menu
         anchors.centerIn: parent
+        spacing: 70 * scale;
         ClickableText {
             anchors.horizontalCenter: parent.horizontalCenter
             text: "Ofline"
-            textSize: 120 * scale
+            textSize: 140 * scale
             fontFamily: sfont.name
             onClicked: {
                 play()
@@ -21,7 +22,7 @@ Item {
         ClickableText {
             anchors.horizontalCenter: parent.horizontalCenter
             text: "Online"
-            textSize: 120 * scale
+            textSize: 140 * scale
             fontFamily: sfont.name
             onClicked: {
 
@@ -30,7 +31,7 @@ Item {
         ClickableText {
             anchors.horizontalCenter: parent.horizontalCenter
             text: "Exit"
-            textSize: 120 * scale
+            textSize: 140 * scale
             fontFamily: sfont.name
             onClicked: {
                 close()

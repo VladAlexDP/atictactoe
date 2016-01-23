@@ -114,8 +114,8 @@ Item {
                 model: 6
                 fontFamily: turn.font.family
                 fontSize: 145 * window.scale
-                lineWidth: 6 * window.scale
-                borderWidth: 6 * window.scale
+                lineWidth: 8 * window.scale
+                borderWidth: 4 * window.scale
                 squareSize: 420 * window.scale
                 spacing: 140 * window.scale
                 visible: false;

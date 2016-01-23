@@ -8,7 +8,6 @@
         <file>images/ATTTBG.png</file>
     </qresource>
     <qresource prefix="/components">
-        <file alias="MainForm.qml">components/MainForm.qml</file>
         <file alias="Menu.qml">components/Menu.qml</file>
         <file alias="Square.qml">components/Square.qml</file>
         <file alias="ClickableImage.qml">components/ClickableImage.qml</file>
