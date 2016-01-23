@@ -12,8 +12,6 @@ Item {
     height: 1920 * scale;
     width: 1080 * scale;
 
-
-
     FontLoader { id: sfont; source: "qrc:/sources/fonts/Schoolbell.ttf";}
     SmartBG {
         id: pages;

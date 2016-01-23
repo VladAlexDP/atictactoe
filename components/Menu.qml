@@ -30,11 +30,11 @@ Item {
         }
         ClickableText {
             anchors.horizontalCenter: parent.horizontalCenter
-            text: "Exit"
+            text: "Quit"
             textSize: 140 * scale
             fontFamily: sfont.name
             onClicked: {
-                close();
+                Qt.quit();
             }
         }
     }

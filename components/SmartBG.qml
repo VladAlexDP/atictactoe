@@ -13,9 +13,14 @@ Item {
 
     Keys.onReleased: {
         if (event.key == Qt.Key_Back) {
+            if(state == "play") {
                 state = "menu";
-                event.accepted = true
+                event.accepted = true;
+            } else {
+                Qt.quit();
+                event.accepted = true;
             }
+        }
     }
 
     Image {

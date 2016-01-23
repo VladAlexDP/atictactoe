@@ -15,6 +15,7 @@ int main(int argc, char *argv[])
     QQuickView *view = new QQuickView;
     view->setSource(QUrl(QStringLiteral("qrc:/main.qml")));
     view->showFullScreen();
+    QObject::connect((QObject*)view->engine(), SIGNAL(quit()), &app, SLOT(quit()));
 
     return app.exec();
 }
