@@ -17,7 +17,7 @@ public:
     typedef short Score_t;
     typedef std::vector<Field> FieldList_t;
     typedef std::tuple<bool, short, short> Result_t;
-    typedef std::pair<unsigned, unsigned> Coordinates_t;
+    typedef std::pair<int, int> Coordinates_t;
     typedef std::pair<Coordinates_t, Coordinates_t> LineCoordinates_t;
 
     Q_OBJECT
@@ -39,8 +39,14 @@ private:
         bool completed;
         int num;
 
+        bool line_exists;
+        LineCoordinates_t line;
+
         Square()
-            :completed(false), num(0)
+            : completed(false),
+              num(0),
+              line_exists(false),
+              line()
         {
             std::fill(&cells[0], &cells[CELLS_NUM], EmptyCell);
         }
@@ -53,14 +59,13 @@ private:
         CellState& operator [](unsigned index) { return cells[index]; }
     };
 
-    class Field
+    struct Field
     {
         std::vector<Square> _squares;
         unsigned _crosses_score;
         unsigned _noughts_score;
         bool _crosses_turn;
 
-    public:
         explicit Field(unsigned size);
         inline std::vector<Square>::iterator begin() { return _squares.begin(); }
         inline std::vector<Square>::iterator end() { return _squares.end(); }
@@ -91,7 +96,8 @@ public:
 signals:
     void cellFilled(int cIndex, int sIndex);
     void squareCompleted(int sIndex);
-    void scoreChanged(int sIndex, int bHCoords, int bVCoords, int eHCoords, int eVCoords);
+    void lineAdded(int sIndex, int bHCoords, int bVCoords, int eHCoords, int eVCoords);
+    void scoreChanged(bool crosses, int value);
     void erase();
     void fillCell(int squareNum, int cellNum, bool cross);
     void nextPage();

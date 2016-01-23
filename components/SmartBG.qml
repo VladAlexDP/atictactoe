@@ -12,7 +12,7 @@ Item {
     Image {
         id: loaderBackground
         anchors.fill: parent
-        source: "qrc:/sources/images/bg_new.png"
+        source: "qrc:/sources/images/ATTTBG.png"
         transform: Rotation {
             id: rotation
             angle: 0
@@ -24,7 +24,7 @@ Item {
         SequentialAnimation {
             id: next
             NumberAnimation {
-                duration: 1000
+                duration: 1200
                 target: rotation
                 property: "angle"
                 from: 0
@@ -68,7 +68,7 @@ Item {
         id: background
         z: -2
         anchors.fill: parent
-        source: "qrc:/sources/images/bg_new.png"
+        source: "qrc:/sources/images/ATTTBG.png"
     }    
 
     states: [

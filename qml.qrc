@@ -3,10 +3,9 @@
         <file>main.qml</file>
     </qresource>
     <qresource prefix="/sources">
-        <file>images/bg.jpg</file>
         <file>fonts/Schoolbell.ttf</file>
         <file>images/eraser.png</file>
-        <file>images/bg_new.png</file>
+        <file>images/ATTTBG.png</file>
     </qresource>
     <qresource prefix="/components">
         <file alias="MainForm.qml">components/MainForm.qml</file>

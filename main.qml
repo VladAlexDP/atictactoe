@@ -5,12 +5,11 @@ import "./components"
 Window {
     id: window
 
-    property double scale: height / 674
+    property double scale: 0.5//Math.min(Screen.height / 1920, Screen.width / 1080);
 
     visible: true;
-    //height: 674;
-    //width: 409;
-    height: Screen.height
+    height: 960//1920 * scale;
+    width: 540//1080 * scale;
 
     FontLoader { id: sfont; source: "qrc:/sources/fonts/Schoolbell.ttf";}
     MainForm {

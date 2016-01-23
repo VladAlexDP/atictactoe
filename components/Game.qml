@@ -72,15 +72,14 @@ Item {
         Item {
             id: gameField
 
-            anchors { fill: parent; leftMargin: 35 * window.scale }
+            anchors { fill: parent; leftMargin: 60 * window.scale }
 
             Text {
                 id: turn
-                anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.topMargin: 10 * window.scale
-                text: "Turn: O"
-                font.pixelSize: 35 * window.scale
+                //anchors.top: parent.top
+                //anchors.topMargin: 0 * window.scale
+                text: "Turn: X"
+                font.pixelSize: 80 * window.scale
                 font.family: sfont.name
                 visible: false;
                 Behavior on visible  {
@@ -89,20 +88,20 @@ Item {
             }
             Row {
                 id: score
-                anchors.top: turn.bottom
-                anchors.topMargin: -16 * window.scale
-                spacing: 250 * window.scale - oscore.width
+                anchors.top: parent.top
+                anchors.topMargin: 100 * window.scale
+                spacing: (980 / 2) * window.scale - oscore.width
                 visible: false;
                 Text {
                     id: oscore
                     text: "O: "
-                    font.pixelSize: 30 * window.scale
+                    font.pixelSize: 80 * window.scale
                     font.family: turn.font.family
                 }
                 Text {
                     id: xscore
                     text: "X: "
-                    font.pixelSize: 30 * window.scale
+                    font.pixelSize: 80 * window.scale
                     font.family: turn.font.family
                 }
                 Behavior on visible  {
@@ -111,14 +110,14 @@ Item {
             }
             Field {
                 id: field
-                anchors { left: parent.left; top: score.bottom; topMargin: 15 * window.scale }
+                anchors { top: parent.top; topMargin: 280 * window.scale }
                 model: 6
                 fontFamily: turn.font.family
-                fontSize: 65 * window.scale
-                lineWidth: 4 * window.scale
-                borderWidth: 2 * window.scale
-                squareSize: 150 * window.scale
-                spacing: 26 * window.scale
+                fontSize: 145 * window.scale
+                lineWidth: 6 * window.scale
+                borderWidth: 6 * window.scale
+                squareSize: 420 * window.scale
+                spacing: 140 * window.scale
                 visible: false;
                 onClicked: {
                     manager.registTurn(sIndex, cIndex)
@@ -144,11 +143,17 @@ Item {
             field.fillCell(sIndex, cIndex, manager.crosses_turn)
         }
         onScoreChanged: {
-            if(manager.crosses_turn)
-                xscore.text += "I"
-            else
-                oscore.text += "I"
-
+            if(crosses) {
+                xscore.text = "X: ";
+                for(var i = 0; i < value; i++)
+                    xscore.text += "I";
+             } else {
+                oscore.text = "O: ";
+                for(var i = 0; i < value; i++)
+                    oscore.text += "I";
+            }
+        }
+        onLineAdded: {
             field.drawLine(sIndex, bHCoords, bVCoords, eHCoords, eVCoords);
         }
         onErase: {
@@ -163,11 +168,13 @@ Item {
         onNextPage: {
             parent.next.start();
             makeInvisible();
+            turn.text = crosses_turn ? "Turn: X" : "Turn: O"
             makeVisible();
         }
         onPrevPage: {
             parent.prev.start();
             makeInvisible();
+            turn.text = crosses_turn ? "Turn: X" : "Turn: O"
             makeVisible();
         }
     }

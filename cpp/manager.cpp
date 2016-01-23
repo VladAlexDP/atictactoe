@@ -1,5 +1,7 @@
 #include "manager.h"
 
+#include <QTime>
+
 Manager::Manager(unsigned squares_num, QObject *parent)
     : QObject(parent),
       _crosses_score(),
@@ -38,33 +40,51 @@ void Manager::clearField()
     emit erase();
 }
 
+void delay(double secs)
+{
+    QTime dieTime= QTime::currentTime().addSecs(secs);
+        while (QTime::currentTime() < dieTime)
+            QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+}
+
 void Manager::next()
 {
-    for(unsigned i = 0; i < _squares_num; ++i)
-        (*_current_field)[i].completed = false;
-    if(_current_field == _field_list.end() - 1)
+    (*_current_field)._crosses_turn = _crosses_turn;
+    (*_current_field)._crosses_score = _crosses_score;
+    (*_current_field)._noughts_score = _noughts_score;
+    if(_current_field == _field_list.end() - 1) {
         _field_list.push_back(Field(_squares_num));
     _current_field = _field_list.end() - 1;
+    } else
+        _current_field++;
+    _crosses_turn = (*_current_field).crosses_turn();
+    _crosses_score = (*_current_field).crosses_score();
+    _noughts_score = (*_current_field).noughts_score();
+    emit nextPage();
+    delay(1);
     fill_field();
 }
 
 void Manager::prev()
 {
-    for(unsigned i = 0; i < _squares_num; ++i)
-        (*_current_field)[i].completed = false;
+    (*_current_field)._crosses_turn = _crosses_turn;
+    (*_current_field)._crosses_score = _crosses_score;
+    (*_current_field)._noughts_score = _noughts_score;
     if(_current_field != _field_list.begin()) {
-        --_current_field;
-        fill_field();
+        _current_field--;
+        _crosses_turn = (*_current_field).crosses_turn();
+        _crosses_score = (*_current_field).crosses_score();
+        _noughts_score = (*_current_field).noughts_score();
+        emit prevPage();
+        fill_field();        
     }
 }
 
 void Manager::recGesture(double angle)
 {
     if(angle > 70 && angle < 110) {
-        emit prevPage();
         prev();
     } else if(angle < -70 && angle > -110) {
-        emit nextPage();
         next();
     }
 }
@@ -123,12 +143,15 @@ void Manager::check_square(unsigned sIndex, unsigned cIndex, bool _crosses_turn)
     Square& sq = (*_current_field)[sIndex];
     if(sq.completed)
         return;
-    Manager::Result_t r = check(sq, cIndex, _crosses_turn ? Cross : Nought);
+    Result_t r = check(sq, cIndex, _crosses_turn ? Cross : Nought);
     // is someone scored
     if(std::get<0>(r)) {
         _crosses_turn ? _crosses_score++ : _noughts_score++;
-        Manager::LineCoordinates_t lineCoordinates = calculate_coordinates(std::get<1>(r), std::get<2>(r));
-        emit scoreChanged(sIndex, lineCoordinates.first.first, lineCoordinates.first.second,
+        sq.line_exists = true;
+        LineCoordinates_t lineCoordinates = calculate_coordinates(std::get<1>(r), std::get<2>(r));
+        sq.line = lineCoordinates;
+        emit scoreChanged(_crosses_turn, _crosses_turn ? _crosses_score : _noughts_score);
+        emit lineAdded(sIndex, lineCoordinates.first.first, lineCoordinates.first.second,
                           lineCoordinates.second.first, lineCoordinates.second.second);
         emit squareCompleted(sIndex);
         sq.completed = true;
@@ -183,18 +206,22 @@ Manager::LineCoordinates_t Manager::calculate_coordinates(short bIndex, short eI
 void Manager::fill_field()
 {
     emit erase();
-    _crosses_turn = (*_current_field).crosses_turn();
-    _crosses_score = (*_current_field).crosses_score();
-    _noughts_score = (*_current_field).noughts_score();
+
+    emit scoreChanged(true, _crosses_score);
+    emit scoreChanged(false, _noughts_score);
     for(unsigned i = 0; i < _squares_num; ++i) {
         for(unsigned j = 0; j < 9; ++j) {
             if((*_current_field)[i][j] == CellState::Cross) {
                 emit fillCell(i, j, true);
-                check_square(i, j, true);
             } else if((*_current_field)[i][j] == CellState::Nought) {
                 emit fillCell(i, j, false);
-                check_square(i, j, false);
-            }
+            }            
+        }
+        if((*_current_field)[i].line_exists) {
+            emit lineAdded(i, (*_current_field)[i].line.first.first,
+                                (*_current_field)[i].line.first.second,
+                                (*_current_field)[i].line.second.first,
+                                (*_current_field)[i].line.second.second);
         }
     }
 }
