@@ -1,9 +1,8 @@
-import QtQuick 2.0
+import QtQuick 2.4
 
 Canvas {
     id: root
 
-    property int cMargin: 10
     property int fSize: 100
     property int bWidth: 3
     property int lWidth: 10
@@ -30,10 +29,9 @@ Canvas {
     Grid {
         id: cellGrid
 
-        anchors.centerIn: parent;
-        width: parent.width - cMargin;
-        height: parent.height - cMargin;
-        columns: 3; rows: 3;
+        width: parent.width
+        height: parent.height
+        columns: 3; rows: 3;        
 
         Repeater {
             id: cellR

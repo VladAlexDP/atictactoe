@@ -5,7 +5,6 @@ Grid {
 
     rows: 3; columns: 2
 
-    property int canvasMargin: 10
     property int fontSize: 100
     property int borderWidth: 3
     property int squareSize: 200
@@ -25,6 +24,9 @@ Grid {
             squareR.itemAt(i).requestPaint();
         }        
     }
+    function fillCell(squareNum, cellNum, cross) {
+        squareR.itemAt(squareNum).cellRepeater.itemAt(cellNum).text = cross ? "X" : "O";
+    }
     function drawLine(sIndex, bHCoords, bVCoords, eHCoords, eVCoords) {
         squareR.itemAt(sIndex).drawLine(bHCoords, bVCoords, eHCoords, eVCoords);
         squareR.itemAt(sIndex).requestPaint();
@@ -33,12 +35,11 @@ Grid {
     Repeater {
         id: squareR
         Square {
-            cMargin: root.canvasMargin
             fSize: root.fontSize
             fFamily: fontFamily
             bWidth: root.borderWidth
             lWidth: lineWidth
-            width: root.squareSize; height: root.squareSize
+            width: root.squareSize; height: width
 
             onClicked: {
                 root.clicked(index, cIndex);
